@@ -1,6 +1,10 @@
 *.py[cod]
 venv
 pywebgrab/index.html
+pywebgrab/css
+pywebgrab/font-awesome
+pywebgrab/img
+pywebgrab/js
 
 # C extensions
 *.so

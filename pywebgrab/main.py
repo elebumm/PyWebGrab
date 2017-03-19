@@ -6,6 +6,7 @@ import os
 import re
 import cssutils
 import logging
+import argparse
 
 
 def connection(url):
@@ -28,6 +29,7 @@ def save_html(html):
 def static_content(html):
     """ Grabbing all link tags and downloading them in the same file structure. """
 
+    global args
     common_css = ['bootstrap', 'font-awesome', 'foundation']
     # css_paths is an empty array that will take all the css paths so a request doesn't need to be made again.
     css_paths = []
@@ -36,7 +38,7 @@ def static_content(html):
 
     # Main loop that iterates through every <link> tag in html file.
     for link in tqdm(soup.find_all('link')):
-        full_path = 'https://blackrockdigital.github.io/startbootstrap-landing-page/{}'.format(link.get('href'))
+        full_path = args.URL + link.get('href')
         r = requests.get(full_path)
         link_text = r.text
         dir_name = re.sub('([a-zA-Z0-9-_.]+\..*)', '', link.get('href'))
@@ -51,7 +53,7 @@ def static_content(html):
 
     print('Downloading Images...')
     for tag in tqdm(soup.find_all('img')):
-        full_path = 'https://blackrockdigital.github.io/startbootstrap-landing-page/{}'.format(tag.get('src'))
+        full_path = args.URL + tag.get('src')
         r = requests.get(full_path)
         link_content = r.content
         dir_name = re.sub('([a-zA-Z0-9-_.]+\..*)', '', tag.get('src'))
@@ -65,7 +67,7 @@ def static_content(html):
 
     print('Downloading script files')
     for link in tqdm(soup.find_all('script')):
-        full_path = 'https://blackrockdigital.github.io/startbootstrap-landing-page/{}'.format(link.get('src'))
+        full_path = args.URL + link.get('src')
         r = requests.get(full_path)
         link_text = r.text
         dir_name = re.sub('([a-zA-Z0-9-_.]+\..*)', '', link.get('src'))
@@ -106,9 +108,9 @@ def static_content(html):
                                 pass
                         else:
                             pass
-    print(background_images)
-    for image in background_images:
-        full_path = 'https://blackrockdigital.github.io/startbootstrap-landing-page/{}'.format(image)
+    print('Downloading extra images')
+    for image in tqdm(background_images):
+        full_path = args.URL + image
         r = requests.get(full_path)
         link_content = r.content
         dir_name = re.sub('([a-zA-Z0-9-_.]+\..*)', '', image)
@@ -122,7 +124,9 @@ def static_content(html):
 
 
 # What gets executed
-input_url = input()
-html_code = connection('https://blackrockdigital.github.io/startbootstrap-landing-page/')
+parser = argparse.ArgumentParser(description='Insert a URL')
+parser.add_argument('URL', metavar='URL', type=str, help="Insert a URL to download.")
+args = parser.parse_args()
+html_code = connection(args.URL)
 save_html(html_code)
 static_content(html_code)
