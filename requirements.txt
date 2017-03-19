@@ -4,3 +4,6 @@ sphinx_rtd_theme
 nose
 coverage
 pypi-publisher
+requests
+BeautifulSoup4
+cssutils

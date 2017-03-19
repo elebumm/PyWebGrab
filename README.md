@@ -1,8 +1,7 @@
-pywebgrab
+PyWebGrab
 ===============================
 
-version number: 0.0.1
-author: Lewis Menelaws
+Created by: Lewis Menelaws
 
 Overview
 --------

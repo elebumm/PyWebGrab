@@ -1,5 +1,6 @@
 *.py[cod]
 venv
+pywebgrab/index.html
 
 # C extensions
 *.so
